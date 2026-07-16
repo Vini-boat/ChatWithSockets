@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Protocolo;
+using Protocol;
 
 namespace Client
 {
@@ -80,17 +80,17 @@ namespace Client
 
         private void OnMessageReceived(string message)
         {
-            string[] segments = message.Split(Mensagens.DELIM);
+            string[] segments = message.Split(Messages.DELIM);
             string commandString = segments[0];
             string[] args = segments[1..];
-            var command = Mensagens.Server.ParseCommand(commandString);
+            var command = Messages.Server.ParseCommand(commandString);
             switch (command)
             {
-                case Mensagens.Server.Commands.OK:
-                    processOk(Mensagens.Client.ParseCommand(args[0]), args);
+                case Messages.Server.Commands.OK:
+                    processOk(Messages.Client.ParseCommand(args[0]), args);
                     break;
-                case Mensagens.Server.Commands.ERROR:
-                    processError(Mensagens.Client.ParseCommand(args[0]), args);
+                case Messages.Server.Commands.ERROR:
+                    processError(Messages.Client.ParseCommand(args[0]), args);
                     break;
             }
         }
@@ -102,11 +102,11 @@ namespace Client
             _networkClient.MessageReceived -= OnMessageReceived;
         }
 
-        private void processOk(Mensagens.Client.Commands commandClient, string[] args)
+        private void processOk(Messages.Client.Commands commandClient, string[] args)
         {
             switch (commandClient)
             {
-                case Mensagens.Client.Commands.USER_LOGIN:
+                case Messages.Client.Commands.USER_LOGIN:
                     this.Invoke(new Action(() =>
                     {
                         this.DialogResult = DialogResult.OK;
@@ -114,20 +114,20 @@ namespace Client
                     }));
                     
                     break;
-                case Mensagens.Client.Commands.USER_CREATE:
+                case Messages.Client.Commands.USER_CREATE:
                     MessageBox.Show("Usuário criado com sucesso");
                     break;
             }
         }
 
-        private void processError(Mensagens.Client.Commands commandClient, string[] args)
+        private void processError(Messages.Client.Commands commandClient, string[] args)
         {
             switch (commandClient)
             {
-                case Mensagens.Client.Commands.USER_LOGIN:
+                case Messages.Client.Commands.USER_LOGIN:
                     MessageBox.Show(args[1], "Erro", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     break;
-                case Mensagens.Client.Commands.USER_CREATE:
+                case Messages.Client.Commands.USER_CREATE:
                     MessageBox.Show(args[1], "Erro", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     break;
             }
@@ -135,12 +135,12 @@ namespace Client
 
         private async void createNewAccountButton_Click(object sender, EventArgs e)
         {
-            await _networkClient.SendMessageAsync(Mensagens.Client.User.Create(nicknameTextBox.Text, passwordTextBox.Text));
+            await _networkClient.SendMessageAsync(Messages.Client.User.Create(nicknameTextBox.Text, passwordTextBox.Text));
         }
 
         private async void loginButton_Click(object sender, EventArgs e)
         {
-            await _networkClient.SendMessageAsync(Mensagens.Client.User.Login(nicknameTextBox.Text, passwordTextBox.Text));
+            await _networkClient.SendMessageAsync(Messages.Client.User.Login(nicknameTextBox.Text, passwordTextBox.Text));
         }
     }
 }

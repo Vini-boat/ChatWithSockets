@@ -1,7 +1,7 @@
 para executar é necessário ter o dotnet instalado.
 
-- Entrar na pasta ChatZap/Server
+- Entrar na pasta ChatWithSockets/Server
 - Executar `dotnet run` para iniciar a instância do server
 
-- Entrar na pasta ChatZap/Client
+- Entrar na pasta ChatWithSockets/Client
 - Executar `dotnet run` para cada instância do client a ser executada

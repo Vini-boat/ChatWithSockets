@@ -1,5 +1,5 @@
 ﻿using Client.Forms;
-using Protocolo;
+using Protocol;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -44,79 +44,79 @@ namespace Client
 
         private async void ChatForm_Load(object sender, EventArgs e)
         {
-            await _networkClient.SendMessageAsync(Mensagens.Client.Contacts.ListAll());
-            await _networkClient.SendMessageAsync(Mensagens.Client.Groups.ListForUser(Nickname));
+            await _networkClient.SendMessageAsync(Messages.Client.Contacts.ListAll());
+            await _networkClient.SendMessageAsync(Messages.Client.Groups.ListForUser(Nickname));
         }
 
         private void OnMessageReceived(string message)
         {
-            string[] segments = message.Split(Mensagens.DELIM);
+            string[] segments = message.Split(Messages.DELIM);
             string commandString = segments[0];
             string[] args = segments[1..];
-            var command = Mensagens.Server.ParseCommand(commandString);
+            var command = Messages.Server.ParseCommand(commandString);
             switch (command)
             {
-                case Mensagens.Server.Commands.OK:
-                    processOk(Mensagens.Client.ParseCommand(args[0]), args);
+                case Messages.Server.Commands.OK:
+                    processOk(Messages.Client.ParseCommand(args[0]), args);
                     break;
-                case Mensagens.Server.Commands.ERROR:
-                    processError(Mensagens.Client.ParseCommand(args[0]), args);
+                case Messages.Server.Commands.ERROR:
+                    processError(Messages.Client.ParseCommand(args[0]), args);
                     break;
-                case Mensagens.Server.Commands.CONTACTS_LIST:
+                case Messages.Server.Commands.CONTACTS_LIST:
                     foreach (string contactName in args[0].Split(','))
                     {
                         if (contactName == Nickname) continue;
                         AddContactGroupBox(contactName);
-                        _networkClient.SendMessageAsync(Mensagens.Client.Contacts.Status(contactName)).Wait();
+                        _networkClient.SendMessageAsync(Messages.Client.Contacts.Status(contactName)).Wait();
                     }
                     break;
-                case Mensagens.Server.Commands.CONTACT_CREATED:
+                case Messages.Server.Commands.CONTACT_CREATED:
                     AddContactGroupBox(args[0]);
                     break;
-                case Mensagens.Server.Commands.CONTACT_ONLINE:
+                case Messages.Server.Commands.CONTACT_ONLINE:
                     ChangeContactStatus(args[0], true);
                     break;
-                case Mensagens.Server.Commands.CONTACT_OFFLINE:
+                case Messages.Server.Commands.CONTACT_OFFLINE:
                     ChangeContactStatus(args[0], false);
                     break;
-                case Mensagens.Server.Commands.CHAT_PRIVATE_MESSAGE:
+                case Messages.Server.Commands.CHAT_PRIVATE_MESSAGE:
                     ReceivePrivateMessage(args[0], args[0], args[1]);
                     break;
-                case Mensagens.Server.Commands.CHAT_GROUP_MESSAGE:
+                case Messages.Server.Commands.CHAT_GROUP_MESSAGE:
                     ReceiveGroupMessage(args[0], args[1], args[2]);
                     break;
-                case Mensagens.Server.Commands.CHAT_PRIVATE_MESSAGE_LIST:
+                case Messages.Server.Commands.CHAT_PRIVATE_MESSAGE_LIST:
                     foreach (string m in args[0].Split(','))
                     {
                         ChatRichTextBox.AppendText(m + Environment.NewLine);
                     }
                     break;
-                case Mensagens.Server.Commands.CHAT_PRIVATE_TYPING_START:
+                case Messages.Server.Commands.CHAT_PRIVATE_TYPING_START:
                     ChangeContactTyping(args[0], true);
                     break;
-                case Mensagens.Server.Commands.CHAT_PRIVATE_TYPING_STOP:
+                case Messages.Server.Commands.CHAT_PRIVATE_TYPING_STOP:
                     ChangeContactTyping(args[0], false);
                     break;
-                case Mensagens.Server.Commands.GROUP_LIST:
+                case Messages.Server.Commands.GROUP_LIST:
                     foreach (string groupName in args[0].Split(','))
                     {
                         if (string.IsNullOrWhiteSpace(groupName)) continue;
                         AddGroupGroupBox(groupName);
-                        _networkClient.SendMessageAsync(Mensagens.Client.Groups.ListUsersIn(groupName)).Wait();
+                        _networkClient.SendMessageAsync(Messages.Client.Groups.ListUsersIn(groupName)).Wait();
                     }
                     break;
-                case Mensagens.Server.Commands.GROUP_CREATED:
+                case Messages.Server.Commands.GROUP_CREATED:
                     AddGroupGroupBox(args[0]);
-                    _networkClient.SendMessageAsync(Mensagens.Client.Groups.ListUsersIn(args[0])).Wait();
+                    _networkClient.SendMessageAsync(Messages.Client.Groups.ListUsersIn(args[0])).Wait();
                     break;
-                case Mensagens.Server.Commands.GROUP_USERS_LIST:
+                case Messages.Server.Commands.GROUP_USERS_LIST:
                     ChangeGroupUsersList(args[0], args[1].Split(',').ToList());
                     break;
 
             }
         }
 
-        private void processOk(Mensagens.Client.Commands commandClient, string[] args)
+        private void processOk(Messages.Client.Commands commandClient, string[] args)
         {
             switch (commandClient)
             {
@@ -124,7 +124,7 @@ namespace Client
             }
         }
 
-        private void processError(Mensagens.Client.Commands commandClient, string[] args)
+        private void processError(Messages.Client.Commands commandClient, string[] args)
         {
             switch (commandClient)
             {
@@ -299,12 +299,12 @@ namespace Client
         {
             if (IsOnGroupScreen)
             {
-                _networkClient.SendMessageAsync(Mensagens.Client.Chat.Group.SendMessage(_currentGroup, messageTextBox.Text)).Wait();
+                _networkClient.SendMessageAsync(Messages.Client.Chat.Group.SendMessage(_currentGroup, messageTextBox.Text)).Wait();
                 ReceiveGroupMessage(_currentGroup, Nickname, messageTextBox.Text);
             }
             else
             {
-                _networkClient.SendMessageAsync(Mensagens.Client.Chat.Private.SendMessage(_currentContact, messageTextBox.Text)).Wait();
+                _networkClient.SendMessageAsync(Messages.Client.Chat.Private.SendMessage(_currentContact, messageTextBox.Text)).Wait();
                 ReceivePrivateMessage(_currentContact, Nickname, messageTextBox.Text);
             }
             messageTextBox.Clear();
@@ -399,7 +399,7 @@ namespace Client
         {
             if (_typingTimer.Enabled)
             {
-                _networkClient.SendMessageAsync(Mensagens.Client.Chat.Private.Typing.Stop(_currentContact)).Wait();
+                _networkClient.SendMessageAsync(Messages.Client.Chat.Private.Typing.Stop(_currentContact)).Wait();
             }
             _typingTimer.Stop();
         }
@@ -415,7 +415,7 @@ namespace Client
                 if (IsOnGroupScreen) return;
                 if (!_typingTimer.Enabled)
                 {
-                    _networkClient.SendMessageAsync(Mensagens.Client.Chat.Private.Typing.Start(_currentContact)).Wait();
+                    _networkClient.SendMessageAsync(Messages.Client.Chat.Private.Typing.Start(_currentContact)).Wait();
                 }
                 _typingTimer.Stop();
                 _typingTimer.Start();

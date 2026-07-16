@@ -1,6 +1,6 @@
-﻿namespace Protocolo
+﻿namespace Protocol
 {
-    public static class Mensagens
+    public static class Messages
     {
         public const char DELIM = ';';
         public static class Client

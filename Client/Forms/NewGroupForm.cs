@@ -1,4 +1,4 @@
-﻿using Protocolo;
+﻿using Protocol;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -33,7 +33,7 @@ namespace Client.Forms
                 MessageBox.Show("O nome do grupo não pode estar vazio.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-            _networkClient.SendMessageAsync(Mensagens.Client.Groups.Create(GroupName)).Wait();
+            _networkClient.SendMessageAsync(Messages.Client.Groups.Create(GroupName)).Wait();
         }
         private void CancelButton_Click(object sender, EventArgs e) 
         { 
@@ -43,29 +43,29 @@ namespace Client.Forms
 
         private void OnMessageReceived(string message)
         {
-            string[] segments = message.Split(Mensagens.DELIM);
+            string[] segments = message.Split(Messages.DELIM);
             string commandString = segments[0];
             string[] args = segments[1..];
-            var command = Mensagens.Server.ParseCommand(commandString);
+            var command = Messages.Server.ParseCommand(commandString);
             switch (command)
             {
-                case Mensagens.Server.Commands.OK:
-                    processOk(Mensagens.Client.ParseCommand(args[0]), args);
+                case Messages.Server.Commands.OK:
+                    processOk(Messages.Client.ParseCommand(args[0]), args);
                     break;
-                case Mensagens.Server.Commands.ERROR:
-                    processError(Mensagens.Client.ParseCommand(args[0]), args);
+                case Messages.Server.Commands.ERROR:
+                    processError(Messages.Client.ParseCommand(args[0]), args);
                     break;
             }
         }
 
-        private void processOk(Mensagens.Client.Commands commandClient, string[] args)
+        private void processOk(Messages.Client.Commands commandClient, string[] args)
         {
             switch (commandClient)
             {
-                case Mensagens.Client.Commands.GROUP_CREATE:
+                case Messages.Client.Commands.GROUP_CREATE:
                     foreach (string contact in SelectedContacts)
                     {
-                        _networkClient.SendMessageAsync(Mensagens.Client.Groups.AddUser(GroupName, contact)).Wait();
+                        _networkClient.SendMessageAsync(Messages.Client.Groups.AddUser(GroupName, contact)).Wait();
                     }
                     this.Invoke(new Action(() =>
                     {
@@ -76,11 +76,11 @@ namespace Client.Forms
             }
         }
 
-        private void processError(Mensagens.Client.Commands commandClient, string[] args)
+        private void processError(Messages.Client.Commands commandClient, string[] args)
         {
             switch (commandClient)
             {
-                case Mensagens.Client.Commands.GROUP_CREATE:
+                case Messages.Client.Commands.GROUP_CREATE:
                     MessageBox.Show(args[1], "Erro", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     break;
             }

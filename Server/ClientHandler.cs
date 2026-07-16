@@ -1,7 +1,7 @@
     using Serilog;
 using System.Net.Sockets;
 using System.Text;
-using Protocolo;
+using Protocol;
 using Server.Services;
 using Server;
 using System.Security.AccessControl;
@@ -47,98 +47,98 @@ public class ClientHandler
                 string? message = await _reader.ReadLineAsync();
                 if (message == null) break;
                 Log.Information($"Recebendo mensagem: {message} de {ClientId}");
-                string[] segments = message.Split(Mensagens.DELIM);
+                string[] segments = message.Split(Messages.DELIM);
                 string[] args = segments[1..];
 
                 string commandString = segments[0];
-                var command = Mensagens.Client.ParseCommand(commandString);
+                var command = Messages.Client.ParseCommand(commandString);
 
                 string? err = null;
                 switch (command)
                 {
-                    case Mensagens.Client.Commands.USER_LOGIN:
+                    case Messages.Client.Commands.USER_LOGIN:
                         err = _userservice.Login(args[0], args[1]);
-                        if (err != null) { await SendMessageAsync(Mensagens.Server.User.Login.Error(err)); break; }
+                        if (err != null) { await SendMessageAsync(Messages.Server.User.Login.Error(err)); break; }
                         Nickname = args[0];
-                        await SendMessageAsync(Mensagens.Server.User.Login.Ok());
-                        await _server.BroadcastMessageAsync(ClientId, Mensagens.Server.Contacts.Online(args[0]));
+                        await SendMessageAsync(Messages.Server.User.Login.Ok());
+                        await _server.BroadcastMessageAsync(ClientId, Messages.Server.Contacts.Online(args[0]));
                         break;
-                    case Mensagens.Client.Commands.USER_LOGOUT:
-                        if (Nickname == null) { await SendMessageAsync(Mensagens.Server.User.Logout.Error("Usu�rio n�o est� logado")); break; }
+                    case Messages.Client.Commands.USER_LOGOUT:
+                        if (Nickname == null) { await SendMessageAsync(Messages.Server.User.Logout.Error("Usu�rio n�o est� logado")); break; }
                         err = _userservice.Logout(Nickname);
-                        if (err != null) { await SendMessageAsync(Mensagens.Server.User.Logout.Error(err)); break; }
+                        if (err != null) { await SendMessageAsync(Messages.Server.User.Logout.Error(err)); break; }
                         run = false;
-                        await SendMessageAsync(Mensagens.Server.User.Logout.Ok());
+                        await SendMessageAsync(Messages.Server.User.Logout.Ok());
                         break;
-                    case Mensagens.Client.Commands.USER_CREATE:
+                    case Messages.Client.Commands.USER_CREATE:
                         err = _userservice.CreateUser(args[0], args[1]);
-                        if (err != null) { await SendMessageAsync(Mensagens.Server.User.Create.Error(err)); break; }
+                        if (err != null) { await SendMessageAsync(Messages.Server.User.Create.Error(err)); break; }
 
-                        await SendMessageAsync(Mensagens.Server.User.Create.Ok());
-                        await _server.BroadcastMessageAsync(ClientId, Mensagens.Server.Contacts.Created(args[0]));
+                        await SendMessageAsync(Messages.Server.User.Create.Ok());
+                        await _server.BroadcastMessageAsync(ClientId, Messages.Server.Contacts.Created(args[0]));
 
                         break;
-                    case Mensagens.Client.Commands.USER_DELETE:
+                    case Messages.Client.Commands.USER_DELETE:
                         err = _userservice.DeleteUser(args[0], args[1]);
-                        if (err != null) { await SendMessageAsync(Mensagens.Server.User.Delete.Error(err)); }
-                        else { await SendMessageAsync(Mensagens.Server.User.Delete.Ok()); }
+                        if (err != null) { await SendMessageAsync(Messages.Server.User.Delete.Error(err)); }
+                        else { await SendMessageAsync(Messages.Server.User.Delete.Ok()); }
                         break;
-                    case Mensagens.Client.Commands.LIST_CONTACTS:
+                    case Messages.Client.Commands.LIST_CONTACTS:
                         List<string> contacts = _userservice.GetAllUsers();
-                        await SendMessageAsync(Mensagens.Server.Contacts.List(contacts));
+                        await SendMessageAsync(Messages.Server.Contacts.List(contacts));
                         break;
-                    case Mensagens.Client.Commands.CONTACT_STATUS:
+                    case Messages.Client.Commands.CONTACT_STATUS:
                         bool isOnline = _userservice.GetUserStatus(args[0]);
                         if (isOnline)
                         {
-                            await SendMessageAsync(Mensagens.Server.Contacts.Online(args[0]));
+                            await SendMessageAsync(Messages.Server.Contacts.Online(args[0]));
                         }
                         else
                         {
-                            await SendMessageAsync(Mensagens.Server.Contacts.Offline(args[0]));
+                            await SendMessageAsync(Messages.Server.Contacts.Offline(args[0]));
                         }
                         break;
-                    case Mensagens.Client.Commands.CHAT_PRIVATE_MESSAGE:
+                    case Messages.Client.Commands.CHAT_PRIVATE_MESSAGE:
                         if (Nickname == null) break;
-                        await _server.SendMessageToAsync(args[0], Mensagens.Server.Chat.Private.SendMessage(Nickname, args[1]));
+                        await _server.SendMessageToAsync(args[0], Messages.Server.Chat.Private.SendMessage(Nickname, args[1]));
                         break;
-                    case Mensagens.Client.Commands.CHAT_PRIVATE_TYPING_START:
+                    case Messages.Client.Commands.CHAT_PRIVATE_TYPING_START:
                         if (Nickname == null) break;
-                        await _server.SendMessageToAsync(args[0], Mensagens.Server.Chat.Private.Typing.Start(Nickname));
+                        await _server.SendMessageToAsync(args[0], Messages.Server.Chat.Private.Typing.Start(Nickname));
                         break;
-                    case Mensagens.Client.Commands.CHAT_PRIVATE_TYPING_STOP:
+                    case Messages.Client.Commands.CHAT_PRIVATE_TYPING_STOP:
                         if (Nickname == null) break;
-                        await _server.SendMessageToAsync(args[0], Mensagens.Server.Chat.Private.Typing.Stop(Nickname));
+                        await _server.SendMessageToAsync(args[0], Messages.Server.Chat.Private.Typing.Stop(Nickname));
                         break;
-                    case Mensagens.Client.Commands.GROUP_CREATE:
+                    case Messages.Client.Commands.GROUP_CREATE:
                         err = _groupService.CreateGroup(args[0]);
-                        if (err != null) { await SendMessageAsync(Mensagens.Server.Group.Create.Error(err)); break; }
-                        if (Nickname == null) { await SendMessageAsync(Mensagens.Server.Group.Create.Error("Usuário não está logado")); break; }
+                        if (err != null) { await SendMessageAsync(Messages.Server.Group.Create.Error(err)); break; }
+                        if (Nickname == null) { await SendMessageAsync(Messages.Server.Group.Create.Error("Usuário não está logado")); break; }
                         _groupService.AddUserToGroup(args[0], Nickname);
-                        await SendMessageAsync(Mensagens.Server.Group.Create.Ok());
-                        await SendMessageAsync(Mensagens.Server.Group.Created(args[0]));
+                        await SendMessageAsync(Messages.Server.Group.Create.Ok());
+                        await SendMessageAsync(Messages.Server.Group.Created(args[0]));
                         break;
-                    case Mensagens.Client.Commands.GROUP_ADD_USER:
+                    case Messages.Client.Commands.GROUP_ADD_USER:
                         err = _groupService.AddUserToGroup(args[0], args[1]);
-                        if (err != null) { await SendMessageAsync(Mensagens.Server.Group.AddUser.Error(err)); break; }
-                        await SendMessageAsync(Mensagens.Server.Group.AddUser.Ok());
-                        await _server.SendMessageToAsync(args[1], Mensagens.Server.Group.Created(args[0]));
+                        if (err != null) { await SendMessageAsync(Messages.Server.Group.AddUser.Error(err)); break; }
+                        await SendMessageAsync(Messages.Server.Group.AddUser.Ok());
+                        await _server.SendMessageToAsync(args[1], Messages.Server.Group.Created(args[0]));
                         break;
-                    case Mensagens.Client.Commands.LIST_GROUPS:
+                    case Messages.Client.Commands.LIST_GROUPS:
                         List<string> groups = _groupService.GetUserGroups(args[0]);
-                        await SendMessageAsync(Mensagens.Server.Group.List(groups));
+                        await SendMessageAsync(Messages.Server.Group.List(groups));
                         break;
-                    case Mensagens.Client.Commands.GROUP_LIST_USERS:
+                    case Messages.Client.Commands.GROUP_LIST_USERS:
                         List<string> users = _groupService.GetGroupUsers(args[0]);
-                        await SendMessageAsync(Mensagens.Server.Group.Users(args[0], users));
+                        await SendMessageAsync(Messages.Server.Group.Users(args[0], users));
                         break;
-                    case Mensagens.Client.Commands.CHAT_GROUP_MESSAGE:
+                    case Messages.Client.Commands.CHAT_GROUP_MESSAGE:
                         if (Nickname == null) break;
                         List<string> groupUsers = _groupService.GetGroupUsers(args[0]);
                         foreach (string user in groupUsers)
                         {
                             if (user == Nickname) continue;
-                            await _server.SendMessageToAsync(user, Mensagens.Server.Chat.Group.SendMessage(args[0], Nickname, args[1]));
+                            await _server.SendMessageToAsync(user, Messages.Server.Chat.Group.SendMessage(args[0], Nickname, args[1]));
                         }
                         break;
                 }
@@ -163,7 +163,7 @@ public class ClientHandler
             string? err = _userservice.Logout(Nickname);
             if (err == null)
             {
-                _server.BroadcastMessageAsync(ClientId, Mensagens.Server.Contacts.Offline(Nickname)).Wait();
+                _server.BroadcastMessageAsync(ClientId, Messages.Server.Contacts.Offline(Nickname)).Wait();
             }
         }
     }

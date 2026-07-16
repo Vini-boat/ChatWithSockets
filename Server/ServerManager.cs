@@ -4,7 +4,7 @@ using System.Collections.Concurrent;
 using System.Net.Sockets;
 
 using Serilog;
-using Protocolo;
+using Protocol;
 
 namespace Server
 {
