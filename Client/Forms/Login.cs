@@ -112,7 +112,7 @@ namespace Client
                         this.DialogResult = DialogResult.OK;
                         this.Close();
                     }));
-                    
+
                     break;
                 case Messages.Client.Commands.USER_CREATE:
                     MessageBox.Show("Usuário criado com sucesso");

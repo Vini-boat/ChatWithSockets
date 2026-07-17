@@ -29,7 +29,6 @@
                 CHAT_GROUP_MESSAGE,
                 CHAT_GROUP_LIST_MESSAGES,
 
-                // TODO: se der
                 CHAT_PRIVATE_TYPING_START,
                 CHAT_PRIVATE_TYPING_STOP,
                 CHAT_GROUP_TYPING_START,
@@ -37,7 +36,7 @@
             }
             public static Commands ParseCommand(string commandString)
             {
-                if (!Enum.TryParse(commandString, out Commands command)) { throw new Exception(); }
+                if (!Enum.TryParse(commandString, out Commands command)) { throw new ArgumentException(); }
                 return command;
             }
             public static class User
@@ -126,7 +125,7 @@
             }
             public static Commands ParseCommand(string commandString)
             {
-                if (!Enum.TryParse(commandString, out Commands command)) { throw new Exception(); }
+                if (!Enum.TryParse(commandString, out Commands command)) { throw new ArgumentException(); }
                 return command;
             }
             public static class User
@@ -159,7 +158,7 @@
             {
                 public static string List(List<string> contacts) => $"{Commands.CONTACTS_LIST}{DELIM}{string.Join(",",contacts)}";
                 public static string Created(string contact) => $"{Commands.CONTACT_CREATED}{DELIM}{contact}";
-                public static string Deleted(string contact) => $"{Commands.CONTACT_CREATED}{DELIM}{contact}";
+                public static string Deleted(string contact) => $"{Commands.CONTACT_DELETED}{DELIM}{contact}";
                 public static string Online(string contact) => $"{Commands.CONTACT_ONLINE}{DELIM}{contact}";
                 public static string Offline(string contact) => $"{Commands.CONTACT_OFFLINE}{DELIM}{contact}";
 
