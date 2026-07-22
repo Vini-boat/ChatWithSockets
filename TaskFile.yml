@@ -1,0 +1,44 @@
+version: '3'
+
+tasks:
+  test:
+    name: Run Tests
+    cmds:
+    - dotnet restore
+    - dotnet test --configuration Release
+  
+  publish-client:
+    vars:
+      NAME: client
+      PROJECT: ./Client/Client.csproj
+      RID: win-x64
+      DESTINATION: '{{default "./publish" .DESTINATION}}'
+      LABEL: '{{.RID}}-{{if eq .IS_SELF_CONTAINED "true"}}self-contained{{else}}framework-dependent{{end}}'
+      OUTPUT: '{{.DESTINATION}}/{{.NAME}}-{{.LABEL}}'
+    cmds:
+      - dotnet restore {{.PROJECT}}
+      - > 
+        dotnet publish {{.PROJECT}}
+        --configuration Release
+        --runtime {{.RID}}
+        --self-contained {{.IS_SELF_CONTAINED}}
+        -p:PublishSingleFile=true
+        --output {{.OUTPUT}}
+
+  publish-server:
+    vars:
+      NAME: server
+      PROJECT: ./server/Server.csproj
+      DESTINATION: '{{default "./publish" .DESTINATION}}'
+      LABEL: '{{.RID}}-{{if eq .IS_SELF_CONTAINED "true"}}self-contained{{else}}framework-dependent{{end}}'
+      OUTPUT: '{{.DESTINATION}}/{{.NAME}}-{{.LABEL}}'
+    cmds:
+      - dotnet restore {{.PROJECT}}
+      - > 
+        dotnet publish {{.PROJECT}}
+        --configuration Release
+        --runtime {{.RID}}
+        --self-contained {{.IS_SELF_CONTAINED}}
+        -p:PublishSingleFile=true
+        --output {{.OUTPUT}}
+  

@@ -2,3 +2,5 @@
 [Bb]in/
 .vs/
 *.db
+build
+publish
