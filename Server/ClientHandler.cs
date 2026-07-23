@@ -46,7 +46,7 @@ public class ClientHandler
             {
                 string? message = await _reader.ReadLineAsync();
                 if (message == null) break;
-                Log.Information($"Recebendo mensagem: {message} de {ClientId}");
+                Log.Information($"Incoming message: {message} from {ClientId}");
                 string[] segments = message.Split(Messages.DELIM);
                 string[] args = segments[1..];
 
@@ -64,7 +64,7 @@ public class ClientHandler
                         await _server.BroadcastMessageAsync(ClientId, Messages.Server.Contacts.Online(args[0]));
                         break;
                     case Messages.Client.Commands.USER_LOGOUT:
-                        if (Nickname == null) { await SendMessageAsync(Messages.Server.User.Logout.Error("Usu�rio n�o est� logado")); break; }
+                        if (Nickname == null) { await SendMessageAsync(Messages.Server.User.Logout.Error("User is not logged in.")); break; }
                         err = _userservice.Logout(Nickname);
                         if (err != null) { await SendMessageAsync(Messages.Server.User.Logout.Error(err)); break; }
                         run = false;
@@ -113,7 +113,7 @@ public class ClientHandler
                     case Messages.Client.Commands.GROUP_CREATE:
                         err = _groupService.CreateGroup(args[0]);
                         if (err != null) { await SendMessageAsync(Messages.Server.Group.Create.Error(err)); break; }
-                        if (Nickname == null) { await SendMessageAsync(Messages.Server.Group.Create.Error("Usuário não está logado")); break; }
+                        if (Nickname == null) { await SendMessageAsync(Messages.Server.Group.Create.Error("User is not logged in.")); break; }
                         _groupService.AddUserToGroup(args[0], Nickname);
                         await SendMessageAsync(Messages.Server.Group.Create.Ok());
                         await SendMessageAsync(Messages.Server.Group.Created(args[0]));
@@ -173,7 +173,7 @@ public class ClientHandler
         if (_writer == null) { throw new InvalidOperationException(); }
         try
         {
-            Log.Information($"mandando mensagem: {message} para {ClientId}");
+            Log.Information($"Senging message: {message} to {ClientId}");
 
             if (!string.IsNullOrEmpty(message))
             {

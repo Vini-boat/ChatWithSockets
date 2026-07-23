@@ -19,19 +19,19 @@ namespace Server
             _listener = new TcpListener(IPAddress.Parse(ip), port);
             _database = new Database("chat.db");
 
-            Log.Information("Servidor iniciado");
+            Log.Information("Server running.");
         }
 
         public async Task StartAsync()
         {
             _listener.Start();
-            Log.Information("Aguardando conexões");
+            Log.Information("Waiting for connections.");
             while (true)
             {
                 TcpClient connectedClient = await _listener.AcceptTcpClientAsync();
                 string clientId = Guid.NewGuid().ToString();
 
-                Log.Information($"client conectado. GUID: {clientId}");
+                Log.Information($"Client connected. GUID: {clientId}");
 
                 ClientHandler handler = new ClientHandler(connectedClient, clientId, this,_database);
 
@@ -46,7 +46,7 @@ namespace Server
         {
             if (_clients.TryRemove(ClientId, out ClientHandler? removedClient))
             {
-                Log.Information($"Cliente {removedClient.ClientId} {ClientId} removido");
+                Log.Information($"Client {removedClient.ClientId} {ClientId} removed");
                 
             }
         }

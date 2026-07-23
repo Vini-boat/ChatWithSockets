@@ -46,27 +46,27 @@
             // 
             // GroupNameTextBox
             // 
-            GroupNameTextBox.Location = new Point(113, 12);
+            GroupNameTextBox.Location = new Point(96, 12);
             GroupNameTextBox.Name = "GroupNameTextBox";
-            GroupNameTextBox.Size = new Size(171, 23);
+            GroupNameTextBox.Size = new Size(188, 23);
             GroupNameTextBox.TabIndex = 1;
             // 
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(12, 12);
+            label1.Location = new Point(12, 15);
             label1.Name = "label1";
-            label1.Size = new Size(95, 15);
+            label1.Size = new Size(78, 15);
             label1.TabIndex = 2;
-            label1.Text = "Nome do grupo:";
+            label1.Text = "Group Name:";
             // 
             // AcceptButton
             // 
-            AcceptButton.Location = new Point(125, 213);
+            AcceptButton.Location = new Point(114, 213);
             AcceptButton.Name = "AcceptButton";
-            AcceptButton.Size = new Size(78, 23);
+            AcceptButton.Size = new Size(89, 23);
             AcceptButton.TabIndex = 3;
-            AcceptButton.Text = "Criar Grupo";
+            AcceptButton.Text = "Create Group";
             AcceptButton.UseVisualStyleBackColor = true;
             AcceptButton.Click += AcceptButton_Click;
             // 
@@ -76,7 +76,7 @@
             CancelButton.Name = "CancelButton";
             CancelButton.Size = new Size(75, 23);
             CancelButton.TabIndex = 4;
-            CancelButton.Text = "Cancelar";
+            CancelButton.Text = "Cancel";
             CancelButton.UseVisualStyleBackColor = true;
             CancelButton.Click += CancelButton_Click;
             // 
@@ -85,9 +85,9 @@
             label2.AutoSize = true;
             label2.Location = new Point(12, 59);
             label2.Name = "label2";
-            label2.Size = new Size(78, 15);
+            label2.Size = new Size(60, 15);
             label2.TabIndex = 5;
-            label2.Text = "Participantes:";
+            label2.Text = "Members:";
             // 
             // NewGroupForm
             // 

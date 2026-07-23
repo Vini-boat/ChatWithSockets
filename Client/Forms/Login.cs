@@ -115,7 +115,7 @@ namespace Client
 
                     break;
                 case Messages.Client.Commands.USER_CREATE:
-                    MessageBox.Show("Usuário criado com sucesso");
+                    MessageBox.Show("User created");
                     break;
             }
         }

@@ -2,16 +2,18 @@ version: '3'
 
 tasks:
   test:
-    name: Run Tests
+    desc: Run dotnet test for the entire project
     cmds:
     - dotnet restore
     - dotnet test --configuration Release
   
   publish-client:
+    desc: "Publish Client project. Default is: win-x64 self-contained to ./publish/"
     vars:
       NAME: client
       PROJECT: ./Client/Client.csproj
       RID: win-x64
+      IS_SELF_CONTAINED: '{{default "true" .IS_SELF_CONTAINED}}'
       DESTINATION: '{{default "./publish" .DESTINATION}}'
       LABEL: '{{.RID}}-{{if eq .IS_SELF_CONTAINED "true"}}self-contained{{else}}framework-dependent{{end}}'
       OUTPUT: '{{.DESTINATION}}/{{.NAME}}-{{.LABEL}}'
@@ -26,10 +28,13 @@ tasks:
         --output {{.OUTPUT}}
 
   publish-server:
+    desc: "Publish Client project. Default is: win-x64 self-contained to ./publish/"
     vars:
       NAME: server
       PROJECT: ./server/Server.csproj
       DESTINATION: '{{default "./publish" .DESTINATION}}'
+      RID: '{{ default "win-x64" .RID}}'
+      IS_SELF_CONTAINED: '{{default "true" .IS_SELF_CONTAINED}}'
       LABEL: '{{.RID}}-{{if eq .IS_SELF_CONTAINED "true"}}self-contained{{else}}framework-dependent{{end}}'
       OUTPUT: '{{.DESTINATION}}/{{.NAME}}-{{.LABEL}}'
     cmds:

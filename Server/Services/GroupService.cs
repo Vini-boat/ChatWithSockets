@@ -19,7 +19,7 @@ namespace Server.Services
             bool ok = _database.CreateGroup(groupName);
             if (!ok)
             {
-                return "Nome de grupo já está em uso";
+                return "Group name is already in use.";
             }
             return null;
         }
@@ -29,7 +29,7 @@ namespace Server.Services
             bool ok = _database.AddUserToGroup(groupName, username);
             if (!ok)
             {
-                return "Erro ao adicionar usuário ao grupo. Verifique se o grupo e o usuário existem.";
+                return "Error adding user to group. Please verify if user and group exist.";
             }
             return null;
         }

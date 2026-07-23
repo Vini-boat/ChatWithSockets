@@ -81,7 +81,7 @@
             connectButton.Name = "connectButton";
             connectButton.Size = new Size(144, 23);
             connectButton.TabIndex = 1;
-            connectButton.Text = "Conectar";
+            connectButton.Text = "Connect";
             connectButton.UseVisualStyleBackColor = true;
             connectButton.Click += connectButton_Click;
             // 
@@ -109,9 +109,9 @@
             label1.Enabled = false;
             label1.Location = new Point(40, 131);
             label1.Name = "label1";
-            label1.Size = new Size(39, 15);
+            label1.Size = new Size(30, 15);
             label1.TabIndex = 26;
-            label1.Text = "Senha";
+            label1.Text = "Pass";
             // 
             // passwordTextBox
             // 
@@ -129,7 +129,7 @@
             createNewAccountButton.Name = "createNewAccountButton";
             createNewAccountButton.Size = new Size(144, 23);
             createNewAccountButton.TabIndex = 7;
-            createNewAccountButton.Text = "Criar nova conta";
+            createNewAccountButton.Text = "Create New User";
             createNewAccountButton.UseVisualStyleBackColor = true;
             createNewAccountButton.Click += createNewAccountButton_Click;
             // 

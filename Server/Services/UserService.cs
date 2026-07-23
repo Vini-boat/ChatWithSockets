@@ -19,7 +19,7 @@ namespace Server.Services
             bool ok = _database.AddUser(username, password);
             if (!ok)
             {
-                return "Username já está em uso";
+                return "Username is already in use.";
             }
             return null;
         }
@@ -31,14 +31,14 @@ namespace Server.Services
             {
                 if (_database.IsUserOnline(username))
                 {
-                    return "Usuário já conectado";
+                    return "User is already connected.";
                 }
-                return "Username ou senha inválidos";
+                return "Invalid username or password.";
             }
             bool statusChanged = _database.ChangeUserStatus(username, true);
             if (!statusChanged)
             {
-                return "Erro ao logar usuário";
+                return "Erro in user login.";
             }
             return null;
         }
@@ -48,7 +48,7 @@ namespace Server.Services
             bool ok = _database.ChangeUserStatus(username, false);
             if (!ok)
             {
-                return "Erro ao deslogar usuário";
+                return "Error in user logoff.";
             }
             return null;
         }

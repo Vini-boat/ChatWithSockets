@@ -30,13 +30,13 @@
         {
             splitContainer1 = new SplitContainer();
             tabControl1 = new TabControl();
-            Contatos = new TabPage();
+            Contacts = new TabPage();
             ContactsflowLayoutPanel = new FlowLayoutPanel();
-            Grupos = new TabPage();
+            Groups = new TabPage();
             GroupsflowLayoutPanel = new FlowLayoutPanel();
             flowLayoutPanel2 = new FlowLayoutPanel();
             NewGroupButton = new Button();
-            Configurações = new TabPage();
+            Config = new TabPage();
             flowLayoutPanel4 = new FlowLayoutPanel();
             button3 = new Button();
             sendButton = new Button();
@@ -47,10 +47,10 @@
             splitContainer1.Panel2.SuspendLayout();
             splitContainer1.SuspendLayout();
             tabControl1.SuspendLayout();
-            Contatos.SuspendLayout();
-            Grupos.SuspendLayout();
+            Contacts.SuspendLayout();
+            Groups.SuspendLayout();
             flowLayoutPanel2.SuspendLayout();
-            Configurações.SuspendLayout();
+            Config.SuspendLayout();
             flowLayoutPanel4.SuspendLayout();
             SuspendLayout();
             // 
@@ -75,9 +75,9 @@
             // 
             // tabControl1
             // 
-            tabControl1.Controls.Add(Contatos);
-            tabControl1.Controls.Add(Grupos);
-            tabControl1.Controls.Add(Configurações);
+            tabControl1.Controls.Add(Contacts);
+            tabControl1.Controls.Add(Groups);
+            tabControl1.Controls.Add(Config);
             tabControl1.Dock = DockStyle.Fill;
             tabControl1.Location = new Point(0, 0);
             tabControl1.Name = "tabControl1";
@@ -85,16 +85,16 @@
             tabControl1.Size = new Size(266, 450);
             tabControl1.TabIndex = 0;
             // 
-            // Contatos
+            // Contacts
             // 
-            Contatos.Controls.Add(ContactsflowLayoutPanel);
-            Contatos.Location = new Point(4, 24);
-            Contatos.Name = "Contatos";
-            Contatos.Padding = new Padding(3);
-            Contatos.Size = new Size(258, 422);
-            Contatos.TabIndex = 0;
-            Contatos.Text = "Contatos";
-            Contatos.UseVisualStyleBackColor = true;
+            Contacts.Controls.Add(ContactsflowLayoutPanel);
+            Contacts.Location = new Point(4, 24);
+            Contacts.Name = "Contacts";
+            Contacts.Padding = new Padding(3);
+            Contacts.Size = new Size(258, 422);
+            Contacts.TabIndex = 0;
+            Contacts.Text = "Contacts";
+            Contacts.UseVisualStyleBackColor = true;
             // 
             // ContactsflowLayoutPanel
             // 
@@ -105,17 +105,17 @@
             ContactsflowLayoutPanel.Size = new Size(252, 416);
             ContactsflowLayoutPanel.TabIndex = 0;
             // 
-            // Grupos
+            // Groups
             // 
-            Grupos.Controls.Add(GroupsflowLayoutPanel);
-            Grupos.Controls.Add(flowLayoutPanel2);
-            Grupos.Location = new Point(4, 24);
-            Grupos.Name = "Grupos";
-            Grupos.Padding = new Padding(3);
-            Grupos.Size = new Size(258, 422);
-            Grupos.TabIndex = 1;
-            Grupos.Text = "Grupos";
-            Grupos.UseVisualStyleBackColor = true;
+            Groups.Controls.Add(GroupsflowLayoutPanel);
+            Groups.Controls.Add(flowLayoutPanel2);
+            Groups.Location = new Point(4, 24);
+            Groups.Name = "Groups";
+            Groups.Padding = new Padding(3);
+            Groups.Size = new Size(258, 422);
+            Groups.TabIndex = 1;
+            Groups.Text = "Groups";
+            Groups.UseVisualStyleBackColor = true;
             // 
             // GroupsflowLayoutPanel
             // 
@@ -147,15 +147,15 @@
             NewGroupButton.UseVisualStyleBackColor = true;
             NewGroupButton.Click += NewGroupButton_Click;
             // 
-            // Configurações
+            // Config
             // 
-            Configurações.Controls.Add(flowLayoutPanel4);
-            Configurações.Location = new Point(4, 24);
-            Configurações.Name = "Configurações";
-            Configurações.Size = new Size(258, 422);
-            Configurações.TabIndex = 2;
-            Configurações.Text = "Configurações";
-            Configurações.UseVisualStyleBackColor = true;
+            Config.Controls.Add(flowLayoutPanel4);
+            Config.Location = new Point(4, 24);
+            Config.Name = "Config";
+            Config.Size = new Size(258, 422);
+            Config.TabIndex = 2;
+            Config.Text = "Config";
+            Config.UseVisualStyleBackColor = true;
             // 
             // flowLayoutPanel4
             // 
@@ -185,9 +185,9 @@
             sendButton.Enabled = false;
             sendButton.Location = new Point(469, 413);
             sendButton.Name = "sendButton";
-            sendButton.Size = new Size(49, 25);
+            sendButton.Size = new Size(43, 25);
             sendButton.TabIndex = 2;
-            sendButton.Text = "Enviar";
+            sendButton.Text = "Send";
             sendButton.UseVisualStyleBackColor = true;
             sendButton.Click += sendButton_Click;
             // 
@@ -209,7 +209,7 @@
             ChatRichTextBox.ReadOnly = true;
             ChatRichTextBox.Size = new Size(524, 406);
             ChatRichTextBox.TabIndex = 0;
-            ChatRichTextBox.Text = "\n\n\n\n\n\n\n\t\tSelecione um contato ou Grupo para mandar mensagem";
+            ChatRichTextBox.Text = "\n\n\n\n\n\n\n\t\t             \n                                                    Select An User Or Group To Send Messages";
             // 
             // ChatForm
             // 
@@ -225,12 +225,12 @@
             ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
             splitContainer1.ResumeLayout(false);
             tabControl1.ResumeLayout(false);
-            Contatos.ResumeLayout(false);
-            Grupos.ResumeLayout(false);
-            Grupos.PerformLayout();
+            Contacts.ResumeLayout(false);
+            Groups.ResumeLayout(false);
+            Groups.PerformLayout();
             flowLayoutPanel2.ResumeLayout(false);
             flowLayoutPanel2.PerformLayout();
-            Configurações.ResumeLayout(false);
+            Config.ResumeLayout(false);
             flowLayoutPanel4.ResumeLayout(false);
             flowLayoutPanel4.PerformLayout();
             ResumeLayout(false);
@@ -240,14 +240,14 @@
 
         private SplitContainer splitContainer1;
         private TabControl tabControl1;
-        private TabPage Contatos;
+        private TabPage Contacts;
         private FlowLayoutPanel ContactsflowLayoutPanel;
-        private TabPage Grupos;
+        private TabPage Groups;
         private FlowLayoutPanel flowLayoutPanel2;
         private Button NewGroupButton;
         private RichTextBox ChatRichTextBox;
         private FlowLayoutPanel GroupsflowLayoutPanel;
-        private TabPage Configurações;
+        private TabPage Config;
         private Button sendButton;
         private TextBox messageTextBox;
         private FlowLayoutPanel flowLayoutPanel4;

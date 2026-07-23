@@ -50,7 +50,7 @@ public class NetworkClient
                 }
                 else
                 {
-                    MessageBox.Show("Desconectado");
+                    MessageBox.Show("Desconected");
                     ServerDisconnected?.Invoke();
                     break;
                 }
