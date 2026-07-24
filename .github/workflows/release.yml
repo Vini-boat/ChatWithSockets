@@ -1,0 +1,76 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+permissions:
+  contents: write
+
+jobs:
+  test:
+    uses: ./.github/workflows/tests.yml
+
+  build-client:
+    needs: test
+    runs-on: windows-latest 
+    strategy:
+      matrix:
+        is_self_contained: [true, false]
+    env:
+      LABEL: win-x64-${{ matrix.is_self_contained && 'self-contained' || 'framework-dependent' }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: "9.0.x"
+      - uses: arduino/setup-task@v3
+      - name: Publish Client (${{ env.LABEL }})
+        run: task publish-client RID=win-x64 IS_SELF_CONTAINED=${{ matrix.is_self_contained }}
+      - name: Zip
+        run: Compress-Archive -Path publish/client-${{ env.LABEL }}/* -DestinationPath ChatWithSockets-Client-${{ env.LABEL }}.zip
+      - uses: actions/upload-artifact@v7
+        with:
+          name: client-${{ env.LABEL }}
+          path: ChatWithSockets-Client-${{ env.LABEL }}.zip
+
+  build-server:
+    needs: test
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        rid: [win-x64, linux-x64]
+        is_self_contained: [true, false]
+    env:
+      LABEL: ${{ matrix.rid }}-${{ matrix.is_self_contained && 'self-contained' || 'framework-dependent' }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: "9.0.x"
+      - uses: arduino/setup-task@v3
+      - name: Publish Server (${{ env.LABEL }})
+        run: task publish-server RID=${{ matrix.rid }} IS_SELF_CONTAINED=${{ matrix.is_self_contained }}
+      - name: Zip
+        run: |
+          cd publish/server-${{ env.LABEL }}
+          zip -r ../../ChatWithSockets-Server-${{ env.LABEL }}.zip .
+      - uses: actions/upload-artifact@v7
+        with:
+          name: server-${{ env.LABEL }}
+          path: ChatWithSockets-Server-${{ env.LABEL }}.zip
+
+  release:
+    needs: [build-client, build-server]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v7
+        with:
+          path: artifacts
+          merge-multiple: true
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v3
+        with:
+          files: artifacts/*.zip
+          generate_release_notes: true
