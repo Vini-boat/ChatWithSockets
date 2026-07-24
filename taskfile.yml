@@ -31,7 +31,7 @@ tasks:
     desc: "Publish Client project. Default is: win-x64 self-contained to ./publish/"
     vars:
       NAME: server
-      PROJECT: ./server/Server.csproj
+      PROJECT: ./Server/Server.csproj
       DESTINATION: '{{default "./publish" .DESTINATION}}'
       RID: '{{ default "win-x64" .RID}}'
       IS_SELF_CONTAINED: '{{default "true" .IS_SELF_CONTAINED}}'
