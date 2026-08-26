@@ -14,7 +14,7 @@ A multiuser chat system built from scratch on raw TCP sockets — no WebSockets,
 - Group creation, management, and group messaging
 - Real-time typing indicators, for both private and group chats
 
-## Screenshots
+<!-- ## Screenshots -->
 
 <!-- TODO: add screenshots of Login, Chat, and New Group forms -->
 <!-- ![Login](docs/screenshots/login.png) -->
