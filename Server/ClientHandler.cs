@@ -173,7 +173,7 @@ public class ClientHandler
         if (_writer == null) { throw new InvalidOperationException(); }
         try
         {
-            Log.Information($"Senging message: {message} to {ClientId}");
+            Log.Information($"Sending message: {message} to {ClientId}");
 
             if (!string.IsNullOrEmpty(message))
             {
